@@ -111,26 +111,12 @@ export default function TabsLayout() {
         name="tools"
         options={{
           title: "Tools",
-          tabBarIcon: ({ focused }) => (
-            <View style={styles.fabWrap}>
-              <LinearGradient
-                colors={BRAND.gradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.fab}
-              >
-                <Ionicons
-                  name="hammer"
-                  size={22}
-                  color="#fff"
-                />
-              </LinearGradient>
-              {focused ? (
-                <View style={[styles.dot, { backgroundColor: BRAND.teal, marginTop: 4 }]} />
-              ) : (
-                <View style={styles.dotSpacer} />
-              )}
-            </View>
+          tabBarIcon: ({ focused, color }) => (
+            <TabIcon
+              name="hammer"
+              focused={focused}
+              color={color}
+            />
           ),
         }}
       />

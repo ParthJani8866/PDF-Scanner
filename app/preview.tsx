@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import * as ImageManipulator from "expo-image-manipulator";
 
@@ -46,6 +46,7 @@ export default function PreviewScreen() {
   const [name, setName] = useState(autoScanName());
   const [folder, setFolder] = useState<string>("Inbox");
   const [saving, setSaving] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     (async () => {
@@ -67,13 +68,13 @@ export default function PreviewScreen() {
   const active = pages[current];
 
   const setFilter = (f: FilterType) => {
-    Haptics.selectionAsync().catch(() => {});
+    Haptics.selectionAsync().catch(() => { });
     setPages((ps) => ps.map((p, i) => (i === current ? { ...p, filter: f } : p)));
   };
 
   const rotate = async () => {
     if (!active) return;
-    Haptics.selectionAsync().catch(() => {});
+    Haptics.selectionAsync().catch(() => { });
     try {
       const result = await ImageManipulator.manipulateAsync(
         active.uri,
@@ -115,7 +116,7 @@ export default function PreviewScreen() {
       };
       const pdfUri = await generatePdf(draft);
       await addDocument({ ...draft, pdfUri });
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => { });
       router.replace("/(tabs)/documents");
     } catch (e) {
       console.log("save error", e);
@@ -336,7 +337,7 @@ export default function PreviewScreen() {
       </View>
 
       {/* Save button */}
-      <View style={{ paddingHorizontal: 20, paddingTop: 14, paddingBottom: 8 }}>
+      <View style={{ paddingHorizontal: 20, paddingTop: 14, paddingBottom: Math.max(insets.bottom, 16) }}>
         <GradientButton
           label={saving ? "Saving…" : `Save PDF (${pages.length} page${pages.length === 1 ? "" : "s"})`}
           onPress={save}
@@ -367,7 +368,7 @@ function ActionBtn({
   return (
     <Pressable
       onPress={() => {
-        Haptics.selectionAsync().catch(() => {});
+        Haptics.selectionAsync().catch(() => { });
         onPress();
       }}
       style={({ pressed }) => [
